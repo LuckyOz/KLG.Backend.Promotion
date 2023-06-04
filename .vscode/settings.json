@@ -1,0 +1,18 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "KLG.Backend.Promotion.Services/bin": true,
+        "KLG.Backend.Promotion.Services/bin/Debug/net6.0": true,
+        "KLG.Backend.Promotion.Services/obj": true
+    },
+    "hide-files.files": [
+        "KLG.Backend.Promotion.Services/bin",
+        "KLG.Backend.Promotion.Services/bin/Debug/net6.0",
+        "KLG.Backend.Promotion.Services/obj"
+    ]
+}
