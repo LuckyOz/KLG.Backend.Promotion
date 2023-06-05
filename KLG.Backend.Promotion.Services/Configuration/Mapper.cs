@@ -5,15 +5,9 @@ using KLG.Backend.Promotion.Services.Entities;
 
 namespace KLG.Backend.Promotion.Services.Configuration;
 
-/// <summary>
-/// Helper class for configuring AutoMapper mappings.
-/// </summary>
 public static class KLGMapper
 {
-    /// <summary>
-    /// The AutoMapper instance.
-    /// </summary>
-    public static Mapper? Mapper;
+    public static Mapper Mapper;
 
     /// <summary>
     /// Initializes the AutoMapper configuration.
@@ -22,9 +16,7 @@ public static class KLGMapper
     {
         var config = new MapperConfiguration(cfg =>
         {
-            cfg.CreateMap<CreateEmployeeDTO, Employee>();
-            cfg.CreateMap<UpdateEmployeeDTO, Employee>();
-            cfg.CreateMap<Employee, EmployeeCreated>();
+            
         });
 
         Mapper = new Mapper(config);

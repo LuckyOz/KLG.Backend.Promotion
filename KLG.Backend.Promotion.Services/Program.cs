@@ -1,13 +1,15 @@
-﻿using KLG.Backend.Promotion.Services.Business.Promotion;
-using KLG.Backend.Promotion.Services.Configuration;
-using KLG.Backend.Promotion.Services.Entities;
+﻿
 using KLG.Library.Microservice;
+using KLG.Backend.Promotion.Services.Entities;
+using KLG.Backend.Promotion.Services.Configuration;
+using KLG.Backend.Promotion.Services.Business.Promotion;
+using KLG.Backend.Promotion.Services.Business.Engine;
 
 namespace KLG.Backend.Organization.Services;
 
 public static class Promotion
 {
-    public async static Task Main(string[] args)
+    public async static Task Main()
     {
         // initialize auto-mapper
         KLGMapper.Initialize();
@@ -15,14 +17,18 @@ public static class Promotion
         // cerate new microservice builder
         var builder = new KLGMicroserviceBuilder<DefaultDbContext>();
 
-        // add your own services
-        builder.Services.AddScoped<IPromotionManager, PromotionManager>();
+        // Add Service
+        builder.Services.AddScoped<IPromoManager, PromoManager>();
+        builder.Services.AddScoped<IEngineManager, EngineManager>();
+        builder.Services.AddSingleton<IPromoSetup, PromoSetup>();
 
-        // add your own configuration classes
-        // you can add more than one custom configurations
-        builder.RegisterConfigurationSection<PromotionConfiguration>();
+        // Add Background Job
+        builder.Services.AddHostedService<PromoBackground>();
 
-        // run the microservice
+        // Add Config
+        builder.RegisterConfigurationSection<PromoConfiguration>();
+
+        // Run App
         await builder.Build().RunAsync();
 
     }

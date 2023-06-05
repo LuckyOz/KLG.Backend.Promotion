@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace KLG.Backend.Promotion.Services.Controllers.RestApi;
 
+[AllowAnonymous]
 [Route("[controller]")]
 public class UtilityController : KLGApiController<DefaultDbContext>
 {
@@ -17,29 +18,19 @@ public class UtilityController : KLGApiController<DefaultDbContext>
         IKLGMessagingProvider messageProvider, Serilog.ILogger logger)
     : base(dbProvider, configuration, messageProvider, logger) { }
 
-    /// <summary>
-    /// Resets the employee data to its default state.
-    /// </summary>
-    /// <returns>An <see cref="IActionResult"/> indicating whether the reset operation was successful.</returns>
-    [AllowAnonymous]
     [HttpPost]
     [Route("reset")]
     public async Task<IActionResult> Reset([FromServices] IBootstrapper bootstrapper)
     {
         await bootstrapper.DisposeAsync();
 
-        await _dbProvider.ResetTablesAsync(typeof(Employee));
+        await _dbProvider.ResetTablesAsync(typeof(PromoWorkflow));
 
         await bootstrapper.BootstrapAsync();
 
         return Ok();
     }
 
-    /// <summary>
-    /// Resets all data in the database to its default state.
-    /// </summary>
-    /// <returns>An <see cref="IActionResult"/> indicating whether the reset operation was successful.</returns>
-    [AllowAnonymous]
     [HttpPost]
     [Route("resetall")]
     public async Task<IActionResult> ResetAll([FromServices] IBootstrapper bootstrapper)

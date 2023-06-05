@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,9 +12,5 @@
   <ItemGroup>
     <None Remove="Request\" />
     <None Remove="Message\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Request\" />
-    <Folder Include="Message\" />
   </ItemGroup>
 </Project>

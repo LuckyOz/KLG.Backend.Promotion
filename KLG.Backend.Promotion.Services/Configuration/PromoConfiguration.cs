@@ -2,7 +2,7 @@
 
 namespace KLG.Backend.Promotion.Services.Configuration;
 
-public class PromotionConfiguration : IKLGConfigurationSection
+public class PromoConfiguration : IKLGConfigurationSection
 {
     //Path for get Config Environment at appsettings.json
     public string Path => "PromotionConfiguration";
@@ -10,10 +10,10 @@ public class PromotionConfiguration : IKLGConfigurationSection
     //Class for Get and Set Config ar Envitonement
     public int MinimumAge { get; private set; }
 
-    public PromotionConfiguration(int minimumAge)
+    public PromoConfiguration(int minimumAge)
     {
         MinimumAge = minimumAge;
     }
 
-    public PromotionConfiguration() { }
+    public PromoConfiguration() { }
 }

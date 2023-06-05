@@ -1,13 +1,13 @@
-﻿using KLG.Library.Microservice.DataAccess;
+﻿
+using KLG.Library.Microservice.DataAccess;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KLG.Backend.Promotion.Services.Entities
 {
-    [Table("promo_rule_expression")]
-    public class PromoRuleExpression : KLGModelBase
+    [Table("promo_rule_variable")]
+    public class PromoRuleVariable : KLGModelBase
     {
-
         [Column("promo_rule_id"), MaxLength(40)]
         [ForeignKey("PromoRule")]
         public string PromoruleId { get; set; }
@@ -15,9 +15,6 @@ namespace KLG.Backend.Promotion.Services.Entities
 
         [Column("linenum")]
         public int Linenum { get; set; }
-
-        [Column("group_line")]
-        public int Groupline { get; set; }
 
         [Column("code"), MaxLength(100)]
         public string Code { get; set; }
@@ -27,8 +24,5 @@ namespace KLG.Backend.Promotion.Services.Entities
 
         [Column("params_expression"), DataType("text")]
         public string ParamsExpression { get; set; }
-
-        [Column("link_exp"), MaxLength(10)]
-        public string Linkexp { get; set; }
     }
 }
