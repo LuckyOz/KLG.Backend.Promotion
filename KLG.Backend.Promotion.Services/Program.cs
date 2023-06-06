@@ -23,7 +23,7 @@ public static class Promotion
         builder.Services.AddSingleton<IPromoSetup, PromoSetup>();
 
         // Add Background Job
-        builder.Services.AddHostedService<PromoBackground>();
+        //builder.Services.AddHostedService<PromoBackground>();
 
         // Add Config
         builder.RegisterConfigurationSection<PromoConfiguration>();

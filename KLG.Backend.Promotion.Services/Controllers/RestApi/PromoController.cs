@@ -28,7 +28,7 @@ namespace KLG.Backend.Promotion.Services.Controllers.RestApi
         }
 
         [HttpPost("find_promo")]
-        public async Task<ActionResult<ServiceResponse<List<FindPromoResponseDto>>>> FindPromo(PromoRequestDto promoRequestDto)
+        public async Task<ActionResult<ServiceResponse<List<FindPromoResponseDto>>>> FindPromo([FromBody]PromoRequestDto promoRequestDto)
         {
             ServiceResponse<List<FindPromoResponseDto>> response = await _promotionManager.FindPromo(promoRequestDto);
 
@@ -40,7 +40,7 @@ namespace KLG.Backend.Promotion.Services.Controllers.RestApi
         }
 
         [HttpPost("validate_promo")]
-        public async Task<ActionResult<ServiceResponse<ValidatePromoResponseDto>>> ValidatePromoV2(PromoRequestDto promoRequestDto)
+        public async Task<ActionResult<ServiceResponse<ValidatePromoResponseDto>>> ValidatePromo([FromBody]PromoRequestDto promoRequestDto)
         {
             ServiceResponse<ValidatePromoResponseDto> response = await _promotionManager.ValidatePromo(promoRequestDto);
 
@@ -51,21 +51,19 @@ namespace KLG.Backend.Promotion.Services.Controllers.RestApi
             return NotFound(response);
         }
 
-        //[HttpPost("calculatepromo")]
-        //[ApiExplorerSettings(IgnoreApi = true)]
-        //public async Task<ActionResult<Response<PromoResponseDto>>> calculatepromov2(PromoRequestDto promoRequestDto)
-        //{
-        //    List<string> dataMaxPromo = new List<string>();
-        //    //dataMaxPromo.Add("DSCMILK");
+        [HttpPost("calculate_promo")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<ActionResult<ServiceResponse<CalculatePromoResponseDto>>> CalculatePromo([FromBody]PromoRequestDto promoRequestDto)
+        {
+            ServiceResponse<CalculatePromoResponseDto> response = await _promotionManager.CalculatePromo(promoRequestDto);
 
-        //    Response<PromoResponseDto> response = await _promotionManager.CalculatePromo(promoRequestDto, dataMaxPromo);
+            if (response.Data != null && response.Success)
+            {
+                return Ok(response);
+            }
 
-        //    if (response.Data != null && response.Success) {
-        //        return Ok(response);
-        //    }
-
-        //    return NotFound(response);
-        //}
+            return NotFound(response);
+        }
 
         [HttpGet]
         [Route("insert_data_default_naomi")]
