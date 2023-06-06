@@ -5,6 +5,7 @@ using KLG.Library.Microservice.Messaging;
 using KLG.Library.Microservice.DataAccess;
 using KLG.Library.Microservice.Configuration;
 using KLG.Backend.Promotion.Services.Entities;
+using KLG.Backend.Promotion.Models.Message;
 
 namespace KLG.Backend.Promotion.Services.Controllers.MessageHandler
 {
@@ -18,6 +19,14 @@ namespace KLG.Backend.Promotion.Services.Controllers.MessageHandler
             : base(dbProvider, configuration, messageProvider, logger)
         {
                 
+        }
+
+        [NonAction]
+        [KLGMessageSubscribe(nameof(PromoCreated))]
+        public async Task EmployeeCreatedSubscriber(KLGMessage p)
+        {
+            var data = _messageProvider.GetPayloadAsync<PromoCreated>(p)
+                ?? throw new InvalidOperationException("Payload is null");
         }
     }
 }

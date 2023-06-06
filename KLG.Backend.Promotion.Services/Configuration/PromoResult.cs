@@ -32,14 +32,13 @@ namespace KLG.Backend.Promotion.Services.Configuration
 
             //Execute Promo Untuk Semua Item
             if (dataPromo.ItemType == "ALL") {
-
-                PromoListItem responseDetailSingle = new();
+                
                 List<PromoListItemDetail> responseDetailGroup = new();
 
-                //Looping Item di Cart untuk Execute Promo
+                // Looping Item di Cart untuk Execute Promo
                 foreach (var loopItemCart in dataCart.ItemProduct) {
+                    
                     decimal discountTypeAll = 0;
-                    PromoListItemDetail ResponseDetailGroupSingle = new();
 
                     if (dataPromo.PromoActionType == "AMOUNT") {
                         //Execute Promo Amount
@@ -57,7 +56,6 @@ namespace KLG.Backend.Promotion.Services.Configuration
                             discountTypeAll = Math.Floor(totalPriceSku / totalPriceCart * Convert.ToDecimal(dataPromo.PromoActionValue));
                         } else {
                             //Execute Promo Item
-
                             discountTypeAll = Convert.ToDecimal(dataPromo.PromoActionValue);
                         }
                     }
@@ -68,14 +66,17 @@ namespace KLG.Backend.Promotion.Services.Configuration
                         discountTypeAll = loopItemCart.Qty * loopItemCart.Price * Convert.ToDecimal(dataPromo.PromoActionType.Replace("%", "")) / 100;
                     }
 
-                    ResponseDetailGroupSingle.SkuCode = loopItemCart.SKUCode;
-                    ResponseDetailGroupSingle.ValDiscount = dataPromo.PromoActionValue;
-                    ResponseDetailGroupSingle.ValMaxDiscount = dataPromo.MaxValue;
-                    ResponseDetailGroupSingle.Price = Convert.ToDouble(loopItemCart.Price);
-                    ResponseDetailGroupSingle.Qty = loopItemCart.Qty;
-                    ResponseDetailGroupSingle.TotalPrice = Convert.ToDouble(loopItemCart.Price * loopItemCart.Qty);
-                    ResponseDetailGroupSingle.TotalDiscount = Convert.ToDouble(discountTypeAll);
-                    ResponseDetailGroupSingle.TotalAfter = Convert.ToDouble(loopItemCart.Price * loopItemCart.Qty - discountTypeAll);
+                    PromoListItemDetail ResponseDetailGroupSingle = new()
+                    {
+                        SkuCode = loopItemCart.SkuCode,
+                        ValDiscount = dataPromo.PromoActionValue,
+                        ValMaxDiscount = dataPromo.MaxValue,
+                        Price = Convert.ToDouble(loopItemCart.Price),
+                        Qty = loopItemCart.Qty,
+                        TotalPrice = Convert.ToDouble(loopItemCart.Price * loopItemCart.Qty),
+                        TotalDiscount = Convert.ToDouble(discountTypeAll),
+                        TotalAfter = Convert.ToDouble(loopItemCart.Price * loopItemCart.Qty - discountTypeAll)
+                    };
 
                     responseDetailGroup.Add(ResponseDetailGroupSingle);
                 }
@@ -88,17 +89,19 @@ namespace KLG.Backend.Promotion.Services.Configuration
                 double total_discountAllItem = responseDetailGroup.Sum(q => q.TotalDiscount) + Convert.ToDouble(roundingAllItem);
                 double total_afterAllItem = total_beforeAllItem - total_discountAllItem;
 
-                responseDetailSingle.Rounding = roundingAllItem;
-                responseDetailSingle.TotalBefore = total_beforeAllItem;
-                responseDetailSingle.TotalDiscount = total_discountAllItem;
-                responseDetailSingle.TotalAfter = total_afterAllItem;
-                responseDetailSingle.PromoListItemDetail = responseDetailGroup;
+                PromoListItem responseDetailSingle = new()
+                {
+                    Rounding = roundingAllItem,
+                    TotalBefore = total_beforeAllItem,
+                    TotalDiscount = total_discountAllItem,
+                    TotalAfter = total_afterAllItem,
+                    PromoListItemDetail = responseDetailGroup
+                };
 
                 responseDetail.Add(responseDetailSingle);
             }
-
             //Execute Promo Untuk Custom Item
-            if (dataPromo.ItemType == "CUSTOM") {
+            else if (dataPromo.ItemType == "CUSTOM") {
                 //Grouping item bedasarkan group di db ms_promo_rule_result
                 List<List<ItemGroupResultPerPromo>> listItemPerPromo = new(); //Variable untuk menampung item custom group
                 var groupList = dataPromo.PromoRuleResult.Select(q => q.Groupline).Distinct().ToList(); //get data disctinc group
@@ -126,7 +129,6 @@ namespace KLG.Backend.Promotion.Services.Configuration
                 //Looping item per group
                 foreach (var loopItemperPromo in listItemPerPromo) {
 
-                    PromoListItem responseDetailSingle = new();
                     List<PromoListItemDetail> responseDetailGroup = new(); //Model for save hasil promo item per group
 
                     decimal discountTypeCustom = 0;
@@ -144,32 +146,26 @@ namespace KLG.Backend.Promotion.Services.Configuration
                     }
 
                     bool executePromoCekResultType = false;
-                    var cekItemGroupInCart = dataCart.ItemProduct.Where(q => dataItemGroup.Contains(q.SKUCode));
+                    var cekItemGroupInCart = dataCart.ItemProduct.Where(q => dataItemGroup.Contains(q.SkuCode));
 
-                    if (cekItemGroupInCart.Count() == loopItemperPromo.Count) {
-                        executePromoCekResultType = true;
-                    }
-
-                    if (dataPromo.ResultType == "V2") {
-                        executePromoCekResultType = true;
-                    }
+                    executePromoCekResultType = cekItemGroupInCart.Count() == loopItemperPromo.Count || dataPromo.ResultType == "V2";
 
                     if (executePromoCekResultType) {
                         foreach (var loopItemPerGroup in loopItemperPromo) {
                             PromoListItemDetail responseDetailGroupSingle = new();
-                            var dataItemCart = dataCart.ItemProduct.FirstOrDefault(q => q.SKUCode == loopItemPerGroup.Item); //Get data di cart
+                            var dataItemCart = dataCart.ItemProduct.FirstOrDefault(q => q.SkuCode == loopItemPerGroup.Item); //Get data di cart
 
                             if (dataItemCart != null) {
 
-                                //Execute Promo Amount
-                                if (dataPromo.PromoActionType == "AMOUNT") {
+
+                                if (dataPromo.PromoActionType == "AMOUNT") { //Execute Promo Amount
                                     if (dataPromo.Cls > 1) {
                                         //Execute Untuk Class Selain Item
                                         //Get Total Harga Per SKU
                                         decimal totalPriceSku = dataItemCart.Qty * dataItemCart.Price;
 
                                         //Get Total Harga Custom Item
-                                        decimal totalPriceCart = dataCart.ItemProduct.Where(q => dataListItem.Contains(q.SKUCode)).Sum(q => q.Price * q.Qty);
+                                        decimal totalPriceCart = dataCart.ItemProduct.Where(q => dataListItem.Contains(q.SkuCode)).Sum(q => q.Price * q.Qty);
 
                                         //Get Discount Prorate di Cart Untuk Custom Item
                                         discountTypeCustom = Math.Floor(totalPriceSku / totalPriceCart * Convert.ToDecimal(dataPromo.PromoActionValue));
@@ -177,24 +173,17 @@ namespace KLG.Backend.Promotion.Services.Configuration
                                         //Execute Untuk Class Item
                                         discountTypeCustom = Convert.ToDecimal(loopItemPerGroup.Value);
                                     }
-                                }
-
-                                //Execute Promo Percent
-                                if (dataPromo.PromoActionType == "PERCENT") {
+                                } else if (dataPromo.PromoActionType == "PERCENT") { //Execute Promo Percent
                                     discountTypeCustom = dataItemCart.Price * dataItemCart.Qty * Convert.ToDecimal(loopItemPerGroup.Value.Replace("%", "")) / 100;
-                                }
-
-                                //Execute Promo Item
-                                if (dataPromo.PromoActionType == "ITEM") {
+                                } else if (dataPromo.PromoActionType == "ITEM") { //Execute Promo Item
                                     discountTypeCustom = dataItemCart.Price;
-                                }
-
-                                //Execute Promo Special Price
-                                if (dataPromo.PromoActionType == "SP") {
+                                } else if (dataPromo.PromoActionType == "SP") { //Execute Promo Special Price
                                     discountTypeCustom = (dataItemCart.Price - Convert.ToDecimal(loopItemPerGroup.Value)) * Convert.ToDecimal(dataItemCart.Qty);
+                                } else {
+                                    discountTypeCustom = 0;
                                 }
 
-                                responseDetailGroupSingle.SkuCode = dataItemCart.SKUCode;
+                                responseDetailGroupSingle.SkuCode = dataItemCart.SkuCode;
                                 responseDetailGroupSingle.ValDiscount = loopItemPerGroup.Value;
                                 responseDetailGroupSingle.ValMaxDiscount = loopItemPerGroup.MaxValue;
                                 responseDetailGroupSingle.Price = Convert.ToDouble(dataItemCart.Price);
@@ -217,17 +206,20 @@ namespace KLG.Backend.Promotion.Services.Configuration
                         double total_discountAllItem = responseDetailGroup.Sum(q => q.TotalDiscount) + Convert.ToDouble(roundingAllItem);
                         double total_afterAllItem = total_beforeAllItem - total_discountAllItem;
 
-                        responseDetailSingle.Rounding = roundingAllItem;
-                        responseDetailSingle.TotalBefore = total_beforeAllItem;
-                        responseDetailSingle.TotalDiscount = total_discountAllItem;
-                        responseDetailSingle.TotalAfter = total_afterAllItem;
-                        responseDetailSingle.PromoListItemDetail = responseDetailGroup;
+                        PromoListItem responseDetailSingle = new()
+                        {
+                            Rounding = roundingAllItem,
+                            TotalBefore = total_beforeAllItem,
+                            TotalDiscount = total_discountAllItem,
+                            TotalAfter = total_afterAllItem,
+                            PromoListItemDetail = responseDetailGroup
+                        };
 
                         responseDetail.Add(responseDetailSingle);
                     }
                 }
-            }
-
+            } 
+            
             if (responseDetail.Count > 0) {
                 //Save data to Response
                 response.Group = dataPromo.PromoworkflowId;

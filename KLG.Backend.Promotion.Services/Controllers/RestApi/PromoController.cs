@@ -5,9 +5,9 @@ using KLG.Library.Microservice;
 using KLG.Library.Microservice.Messaging;
 using KLG.Library.Microservice.DataAccess;
 using KLG.Library.Microservice.Configuration;
+using KLG.Backend.Promotion.Models.Request;
 using KLG.Backend.Promotion.Services.Entities;
 using KLG.Backend.Promotion.Services.Business.Promotion;
-using KLG.Backend.Promotion.Models.Request;
 
 namespace KLG.Backend.Promotion.Services.Controllers.RestApi
 {
@@ -28,16 +28,44 @@ namespace KLG.Backend.Promotion.Services.Controllers.RestApi
         }
 
         [HttpPost("find_promo")]
-        public async Task<ActionResult<List<FindPromoResponseDto>>> FindPromo([FromBody] PromoRequestDto promoRequestDto)
+        public async Task<ActionResult<ServiceResponse<List<FindPromoResponseDto>>>> FindPromo(PromoRequestDto promoRequestDto)
         {
-            List<FindPromoResponseDto> response = await _promotionManager.FindPromo(promoRequestDto);
+            ServiceResponse<List<FindPromoResponseDto>> response = await _promotionManager.FindPromo(promoRequestDto);
 
-            if (response.Count > 0) {
+            if (response.Data != null && response.Data.Count > 0 && response.Success) {
                 return Ok(response);
             }
 
-            return NotFound();
+            return NotFound(response);
         }
+
+        [HttpPost("validate_promo")]
+        public async Task<ActionResult<ServiceResponse<ValidatePromoResponseDto>>> ValidatePromoV2(PromoRequestDto promoRequestDto)
+        {
+            ServiceResponse<ValidatePromoResponseDto> response = await _promotionManager.ValidatePromo(promoRequestDto);
+
+            if (response.Data != null && response.Success) {
+                return Ok(response);
+            }
+
+            return NotFound(response);
+        }
+
+        //[HttpPost("calculatepromo")]
+        //[ApiExplorerSettings(IgnoreApi = true)]
+        //public async Task<ActionResult<Response<PromoResponseDto>>> calculatepromov2(PromoRequestDto promoRequestDto)
+        //{
+        //    List<string> dataMaxPromo = new List<string>();
+        //    //dataMaxPromo.Add("DSCMILK");
+
+        //    Response<PromoResponseDto> response = await _promotionManager.CalculatePromo(promoRequestDto, dataMaxPromo);
+
+        //    if (response.Data != null && response.Success) {
+        //        return Ok(response);
+        //    }
+
+        //    return NotFound(response);
+        //}
 
         [HttpGet]
         [Route("insert_data_default_naomi")]

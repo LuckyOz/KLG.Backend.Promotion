@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KLG.Backend.Promotion.Model
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KLG.Backend.Promotion.Services", "KLG.Backend.Promotion.Services\KLG.Backend.Promotion.Services.csproj", "{4DF7AFD5-5C77-47FB-AB0F-59FC72B19829}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KLG.Backend.Promotion.Tests", "KLG.Backend.Promotion.Tests\KLG.Backend.Promotion.Tests.csproj", "{C29B5F1D-6E71-4DEE-BFF9-C3E9C4DA8153}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{4DF7AFD5-5C77-47FB-AB0F-59FC72B19829}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DF7AFD5-5C77-47FB-AB0F-59FC72B19829}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DF7AFD5-5C77-47FB-AB0F-59FC72B19829}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C29B5F1D-6E71-4DEE-BFF9-C3E9C4DA8153}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C29B5F1D-6E71-4DEE-BFF9-C3E9C4DA8153}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C29B5F1D-6E71-4DEE-BFF9-C3E9C4DA8153}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C29B5F1D-6E71-4DEE-BFF9-C3E9C4DA8153}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

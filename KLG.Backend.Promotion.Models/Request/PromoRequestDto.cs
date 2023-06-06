@@ -24,9 +24,9 @@ namespace KLG.Backend.Promotion.Models.Request
     public class ItemProduct
     {
         [JsonProperty("skuCode")]
-        public string SKUCode { get; set; }
+        public string SkuCode { get; set; }
         [JsonProperty("skuGroup")]
-        public string SKUGroup { get; set; }
+        public string SkuGroup { get; set; }
         [JsonProperty("qty")]
         public int Qty { get; set; }
         [JsonProperty("price")]
