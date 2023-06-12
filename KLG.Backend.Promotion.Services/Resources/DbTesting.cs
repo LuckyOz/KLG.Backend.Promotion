@@ -9,7 +9,7 @@ namespace KLG.Backend.Promotion.Services.Resources
         {
             new PromoWorkflow
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = "ed95cc28-d408-4d3c-9736-3024c7a4f8f4",
                 Name = "CHATIME PROMO",
                 ActiveFlag = true,
                 PromoWorkflowExpression = new List<PromoWorkflowExpression>()
@@ -38,7 +38,7 @@ namespace KLG.Backend.Promotion.Services.Resources
                     //Promo Amount Class Cart All Item
                     new PromoRule
                     {
-                        Id = Guid.NewGuid().ToString(),
+                        Id = "2c4ce78f-f8e8-4dc5-ae0a-06c8423a966d",
                         Name = "Promo Happy New Year",
                         Cls = 2,
                         Lvl = 2,
